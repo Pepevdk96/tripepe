@@ -142,6 +142,11 @@ export const SPORT_COLORS: Record<SportType, { hex: string; tailwind: string; bg
     tailwind: 'text-gray-400',
     bg: 'bg-gray-500/10',
   },
+  brick: {
+    hex: '#F59E0B',
+    tailwind: 'text-amber-500',
+    bg: 'bg-amber-500/10',
+  },
 }
 
 /**
