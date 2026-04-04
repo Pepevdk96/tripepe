@@ -164,6 +164,8 @@ export async function fetchRaces(): Promise<Race[]> {
       target,
       type: (r.race_type === 'marathon' ? 'marathon' : 'triathlon') as Race['type'],
       distance: r.race_type === 'marathon' ? '42.195 km' : r.race_type === '70.3' ? '113 km' : r.race_type,
+      priority: r.priority || undefined,
+      status: r.status || 'upcoming',
     }
   })
 }
