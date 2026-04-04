@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { getCurrentWeek, formatDate, isToday, getTodayFormatted } from '@/lib/helpers'
 import type { Week } from '@/lib/trainingData'
 import WorkoutCard from './WorkoutCard'
+import WeeklyStressBalance from './WeeklyStressBalance'
 
 interface WeekViewProps {
   trainingPlan: Week[]
@@ -136,6 +137,9 @@ export default function WeekView({ trainingPlan }: WeekViewProps) {
           )
         })}
       </div>
+
+      {/* Weekly Stress Balance */}
+      <WeeklyStressBalance trainingPlan={trainingPlan} />
 
       {/* Key workout highlight */}
       {week.keyWorkout && (
