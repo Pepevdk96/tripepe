@@ -20,13 +20,23 @@ export default function AdaptiveReplan({ weekSessions }: AdaptiveReplanProps) {
   const [expandedSession, setExpandedSession] = useState<string | null>(null)
   const [selectedReplans, setSelectedReplans] = useState<Record<string, string>>({})
 
-  // Calculate session statuses (in a real app, this would come from completed workouts data)
-  const sessionStatuses: SessionStatus[] = weekSessions.map((workout) => ({
-    workout,
-    completed: false, // Would be calculated from actual completion data
-    missed: false, // Would be calculated from actual date comparison
-    isKeyWorkout: workout.isKeyWorkout || false,
-  }))
+  // Calculate session statuses by comparing workout dates to today
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const sessionStatuses: SessionStatus[] = weekSessions.map((workout) => {
+    const workoutDate = new Date(workout.date)
+    workoutDate.setHours(0, 0, 0, 0)
+    const isPast = workoutDate < today
+    const isNonRest = workout.type !== 'rest' && workout.type !== 'race'
+
+    return {
+      workout,
+      completed: false, // TODO: integrate with actual completion data from Supabase
+      missed: isPast && isNonRest, // Past non-rest workouts are considered missed if not completed
+      isKeyWorkout: workout.isKeyWorkout || false,
+    }
+  })
 
   const missedSessions = sessionStatuses.filter(
     (s) => s.missed && s.workout.type !== 'rest' && s.workout.type !== 'race'
