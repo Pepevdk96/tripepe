@@ -17,6 +17,8 @@ import WhyThisWorkout from './WhyThisWorkout'
 import FuelingGuidance from './FuelingGuidance'
 import DuringFueling from './DuringFueling'
 import RouteSuggestion from './RouteSuggestion'
+import AdaptiveReplan from './AdaptiveReplan'
+import ReadinessCheck from './ReadinessCheck'
 import { Play, Lightbulb, Clock, Zap, CheckCircle2 } from 'lucide-react'
 
 interface TodayViewProps {
@@ -54,6 +56,11 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
         ))}
       </div>
 
+      {/* Adaptive Replan for missed workouts */}
+      {currentWeek && (
+        <AdaptiveReplan weekSessions={currentWeek.sessions} />
+      )}
+
       {/* Today's workout */}
       {todayWorkout ? (
         <div className="space-y-3">
@@ -81,6 +88,9 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
               </p>
             </div>
           )}
+
+          {/* Readiness Check */}
+          <ReadinessCheck />
 
           <div className="glow-run">
             <WorkoutCard workout={todayWorkout} />
@@ -110,7 +120,7 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
                     )}
                     {todayWorkout.type === 'run' && (
                       <>
-                        <li>• Leg kleding klaar</li>
+                       <li>• Leg kleding klaar</li>
                         <li>• Vul waterfles</li>
                         <li>• Check weersvoorspelling</li>
                       </>
@@ -159,7 +169,7 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
             </div>
           )}
 
-          {/* Fallback workout option */}
+          {/* Fallback workoutt option */}
           <FallbackWorkout workout={todayWorkout} />
 
           {/* Why This Workout explanation */}
