@@ -9,7 +9,7 @@ interface PlanReshapeInfoProps {
 }
 
 export default function PlanReshapeInfo({ races, currentWeekPhase = 'Build' }: PlanReshapeInfoProps) {
-  const today = new Date('2026-04-04')
+  const today = new Date()
 
   // Get A-races sorted by date
   const aRaces = races
