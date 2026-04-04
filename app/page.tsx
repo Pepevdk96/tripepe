@@ -8,6 +8,7 @@ import WeekView from '@/components/WeekView'
 import PlanView from '@/components/PlanView'
 import RacesView from '@/components/RacesView'
 import LogView from '@/components/LogView'
+import RaceFinder from '@/components/RaceFinder'
 import { useTriPepeData } from '@/lib/useTriPepeData'
 import { RefreshCw } from 'lucide-react'
 
@@ -25,6 +26,8 @@ export default function Home() {
         return <PlanView trainingPlan={trainingPlan} onSelectWeek={() => setActiveTab('week')} />
       case 'races':
         return <RacesView races={races} />
+      case 'discover':
+        return <RaceFinder />
       case 'log':
         return <LogView completedWorkouts={completedWorkouts} garminSync={garminSync} onSync={refetch} />
       default:

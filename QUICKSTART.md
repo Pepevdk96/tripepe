@@ -74,7 +74,7 @@ In DevTools:
 - Total plan statistics
 
 ### 4. Races View
-- Marathon Rotterdam (May 10)
+- Marathon Kopenhagen (May 10)
   - Target: 2:49:59
   - Detailed 9-split pacing table
   - Per-split nutrition strategy

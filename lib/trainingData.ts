@@ -10,6 +10,7 @@ export interface Workout {
   intensity: 'rest' | 'easy' | 'moderate' | 'hard' | 'race';
   paceTarget?: string;
   isKeyWorkout?: boolean;
+  fallback?: { duration: string; description: string };
 }
 
 export interface Week {
@@ -29,6 +30,8 @@ export interface Race {
   target: string;
   type: 'marathon' | 'triathlon';
   distance?: string;
+  priority?: 'A' | 'B' | 'C';
+  status?: 'upcoming' | 'completed' | 'dns';
 }
 
 export interface AthleteProfile {
@@ -79,11 +82,13 @@ export const athleteProfile: AthleteProfile = {
 // Race data
 export const races: Race[] = [
   {
-    name: 'Marathon Rotterdam',
+    name: 'Marathon Kopenhagen',
     date: '2026-05-10',
     target: '2:49:59',
     type: 'marathon',
     distance: '42.2 km',
+    priority: 'A',
+    status: 'upcoming',
   },
   {
     name: 'Half Ironman 70.3',
@@ -91,6 +96,8 @@ export const races: Race[] = [
     target: '4:29:00',
     type: 'triathlon',
     distance: '113 km (1.9km swim + 90km bike + 21km run)',
+    priority: 'A',
+    status: 'upcoming',
   },
 ];
 
@@ -434,7 +441,7 @@ export const trainingPlan: Week[] = [
         day: 'Zondag',
         date: '2026-05-03',
         type: 'race',
-        title: 'Rotterdam Marathon',
+        title: 'Marathon Kopenhagen',
         description: 'Target: 2:49:59',
         duration: '2:50',
         distance: '42.2 km',

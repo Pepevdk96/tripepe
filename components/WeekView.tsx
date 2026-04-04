@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { getCurrentWeek, formatDate } from '@/lib/helpers'
+import { getCurrentWeek, formatDate, isToday, getTodayFormatted } from '@/lib/helpers'
 import type { Week } from '@/lib/trainingData'
 import WorkoutCard from './WorkoutCard'
 
@@ -108,18 +108,30 @@ export default function WeekView({ trainingPlan }: WeekViewProps) {
             'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag', 'Zondag',
           ]
           const dayName = dayNames[idx]
+          const isTodaySession = isToday(session.date)
 
           return (
-            <div key={idx} className="space-y-2">
-              <div className="flex items-center justify-between px-2">
-                <span className="text-sm font-medium text-gray-400">
+            <div key={idx} className={`space-y-2 ${isTodaySession ? 'relative' : ''}`}>
+              {/* Today indicator */}
+              {isTodaySession && (
+                <div className="absolute -left-1 top-0 bottom-0 w-1 bg-gradient-to-b from-[#FF4444] to-[#FFD700] rounded-full" />
+              )}
+              <div className={`flex items-center justify-between px-2 ${isTodaySession ? 'pl-4' : ''}`}>
+                <span className={`text-sm font-medium ${isTodaySession ? 'text-white' : 'text-gray-400'}`}>
                   {dayName}
+                  {isTodaySession && (
+                    <span className="ml-2 text-xs font-bold px-2 py-0.5 bg-[#FF4444]/20 text-[#FF4444] rounded-full">
+                      Vandaag
+                    </span>
+                  )}
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className={`text-xs ${isTodaySession ? 'text-gray-300' : 'text-gray-500'}`}>
                   {formatDate(session.date)}
                 </span>
               </div>
-              <WorkoutCard workout={session} />
+              <div className={isTodaySession ? 'pl-3' : ''}>
+                <WorkoutCard workout={session} />
+              </div>
             </div>
           )
         })}

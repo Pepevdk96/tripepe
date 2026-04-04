@@ -6,11 +6,18 @@ import {
   getTodayWorkout,
   getCurrentWeek,
   getRecoveryTips,
+  getTodayFormatted,
+  isToday,
 } from '@/lib/helpers'
 import type { Week, Race } from '@/lib/trainingData'
 import WorkoutCard from './WorkoutCard'
 import RaceCountdown from './RaceCountdown'
-import { Play, Lightbulb } from 'lucide-react'
+import FallbackWorkout from './FallbackWorkout'
+import WhyThisWorkout from './WhyThisWorkout'
+import FuelingGuidance from './FuelingGuidance'
+import DuringFueling from './DuringFueling'
+import RouteSuggestion from './RouteSuggestion'
+import { Play, Lightbulb, Clock, Zap, CheckCircle2 } from 'lucide-react'
 
 interface TodayViewProps {
   trainingPlan: Week[]
@@ -30,8 +37,9 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
       {/* Greeting */}
       <div>
         <h2 className="text-2xl font-bold text-white mb-1">{getGreeting()}</h2>
-        <p className="text-gray-400 text-sm">
-          {currentWeek && `Week ${currentWeek.number} - ${currentWeek.phase}`}
+        <p className="text-gray-400 text-sm capitalize">{getTodayFormatted()}</p>
+        <p className="text-gray-500 text-xs mt-1">
+          {currentWeek && `Week ${currentWeek.number} — ${currentWeek.phase}`}
         </p>
       </div>
 
@@ -51,12 +59,129 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="font-bold text-white">Vandaag</h3>
+            {todayWorkout.type !== 'rest' && todayWorkout.type !== 'race' && (
+              <div className="flex items-center gap-1 text-xs text-gray-400">
+                <Clock size={14} />
+                {todayWorkout.duration}
+              </div>
+            )}
           </div>
+
+          {/* Duration and goal summary */}
+          {todayWorkout.type !== 'rest' && todayWorkout.type !== 'race' && (
+            <div className="bg-[#12121f] border border-gray-700/30 rounded-lg px-3 py-2">
+              <p className="text-xs text-gray-400">
+                <span className="text-gray-300 font-medium">{todayWorkout.title}</span>
+                {todayWorkout.paceTarget && (
+                  <>
+                    <span className="text-gray-600"> • </span>
+                    <span className="text-gray-400">Doel: {todayWorkout.paceTarget}</span>
+                  </>
+                )}
+              </p>
+            </div>
+          )}
 
           <div className="glow-run">
             <WorkoutCard workout={todayWorkout} />
           </div>
 
+          {/* Voorbereiding section */}
+          {todayWorkout.type !== 'rest' && todayWorkout.type !== 'race' && (
+            <div className="card-base bg-[#12121f] border border-blue-700/30">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 size={18} className="text-blue-400 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-blue-300 mb-2">Voorbereiding</p>
+                  <ul className="space-y-1 text-xs text-gray-400">
+                    {todayWorkout.type === 'swim' && (
+                      <>
+                        <li>• Neem zwembril mee</li>
+                        <li>• Pak badmuts in</li>
+                        <li>• Controleer pullbuoy in tas</li>
+                      </>
+                    )}
+                    {todayWorkout.type === 'bike' && (
+                      <>
+                        <li>• Check bandenspanning</li>
+                        <li>• Vul bidons met drank</li>
+                        <li>• Zet fietscomputer aan</li>
+                      </>
+                    )}
+                    {todayWorkout.type === 'run' && (
+                      <>
+                        <li>• Leg kleding klaar</li>
+                        <li>• Vul waterfles</li>
+                        <li>• Check weersvoorspelling</li>
+                      </>
+                    )}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Race day checklist */}
+          {todayWorkout.type === 'race' && (
+            <div className="card-base bg-gradient-to-br from-yellow-900/20 to-yellow-800/10 border border-yellow-700/30">
+              <div className="flex items-start gap-3">
+                <Zap size={18} className="text-yellow-400 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-yellow-300 mb-2">Race Day Checklist</p>
+                  <ul className="space-y-1 text-xs text-gray-400">
+                    <li>• Zet wekker op tijd</li>
+                    <li>• Eet goed ontbijt (carbs + proteïne)</li>
+                    <li>• Controleer weersomstandigheden</li>
+                    <li>• Pak race kit in</li>
+                    <li>• Zorg voor voldoende voeding</li>
+                    <li>• Blijf relaxed, je bent klaar!</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Recovery tips for rest day */}
+          {todayWorkout.type === 'rest' && (
+            <div className="card-base bg-gradient-to-br from-purple-900/20 to-purple-800/10 border border-purple-700/30">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 size={18} className="text-purple-400 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-purple-300 mb-2">Recovery Tips</p>
+                  <ul className="space-y-1 text-xs text-gray-400">
+                    <li>• Zorg voor voldoende water</li>
+                    <li>• Slaap 7-9 uur per nacht</li>
+                    <li>• Eet proteïne-rijk voedsel</li>
+                    <li>• Doe wat lichte stretching</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Fallback workout option */}
+          <FallbackWorkout workout={todayWorkout} />
+
+          {/* Why This Workout explanation */}
+          {todayWorkout.type !== 'rest' && (
+            <WhyThisWorkout workout={todayWorkout} weekPhase={currentWeek?.phase || ''} />
+          )}
+
+          {/* Fueling Guidance */}
+          {todayWorkout.type !== 'rest' && (
+            <FuelingGuidance workout={todayWorkout} />
+          )}
+
+          {/* During Fueling Calculator */}
+          {todayWorkout.type !== 'rest' && todayWorkout.duration && parseInt(todayWorkout.duration) > 45 && (
+            <DuringFueling workout={todayWorkout} />
+          )}
+
+
+          {/* Route Suggestion */}
+          {todayWorkout.type !== 'rest' && todayWorkout.type !== 'swim' && (
+            <RouteSuggestion workout={todayWorkout} />
+          )}
           {/* Start workout button */}
           {todayWorkout.type !== 'rest' && (
             <button className="btn-primary w-full flex items-center justify-center gap-2">
@@ -82,6 +207,7 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
           <div className="flex items-center justify-center gap-2">
             {currentWeek.sessions.map((session, idx) => {
               const dayNames = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo']
+              const isTodaySession = isToday(session.date)
               const sportColors: Record<string, string> = {
                 swim: 'bg-[#00AAFF]/20 border-[#00AAFF]',
                 bike: 'bg-[#00CC66]/20 border-[#00CC66]',
@@ -95,20 +221,22 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
                   key={idx}
                   className={`flex flex-col items-center gap-1 flex-1 p-2 rounded-lg border ${
                     sportColors[session.type] || 'bg-gray-900/20 border-gray-700'
-                  }`}
+                  } ${isTodaySession ? 'ring-2 ring-white/40 scale-105' : ''}`}
                 >
-                  <div className="text-xs font-medium text-gray-400">
+                  <div className={`text-xs font-medium ${isTodaySession ? 'text-white font-bold' : 'text-gray-400'}`}>
                     {dayNames[idx]}
                   </div>
                   <div
                     className={`w-6 h-6 rounded-full border-2 flex items-center justify-center text-xs font-bold ${
-                      session.type === 'swim'
-                        ? 'border-[#00AAFF] text-[#00AAFF]'
-                        : session.type === 'bike'
-                          ? 'border-[#00CC66] text-[#00CC66]'
-                          : session.type === 'run'
-                            ? 'border-[#FF4444] text-[#FF4444]'
-                            : 'border-[#666688] text-[#666688]'
+                      isTodaySession
+                        ? 'bg-white/20 border-white text-white'
+                        : session.type === 'swim'
+                          ? 'border-[#00AAFF] text-[#00AAFF]'
+                          : session.type === 'bike'
+                            ? 'border-[#00CC66] text-[#00CC66]'
+                            : session.type === 'run'
+                              ? 'border-[#FF4444] text-[#FF4444]'
+                              : 'border-[#666688] text-[#666688]'
                     }`}
                   >
                     {session.type === 'swim'
@@ -121,6 +249,9 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
                             ? '!'
                             : '-'}
                   </div>
+                  {isTodaySession && (
+                    <div className="w-1 h-1 rounded-full bg-white mt-0.5" />
+                  )}
                 </div>
               )
             })}

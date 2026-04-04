@@ -112,7 +112,7 @@ A fully-featured Next.js PWA for triathlon training. Dark theme, mobile-first, b
 
 ### Race Data Included
 
-**Marathon Rotterdam (May 10, 2026)**
+**Marathon Kopenhagen (May 10, 2026)**
 - Target: 2:49:59
 - 9 detailed km splits with:
   - Pace per split

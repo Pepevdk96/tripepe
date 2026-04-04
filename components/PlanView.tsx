@@ -1,7 +1,9 @@
 'use client'
 
 import { getCurrentWeek, getProgressPercentage, formatDate } from '@/lib/helpers'
-import type { Week } from '@/lib/trainingData'
+import type { Week, Race } from '@/lib/trainingData'
+import { races } from '@/lib/trainingData'
+import PlanReshapeInfo from './PlanReshapeInfo'
 
 interface PlanViewProps {
   trainingPlan: Week[]
@@ -18,6 +20,9 @@ export default function PlanView({ trainingPlan, onSelectWeek }: PlanViewProps) 
         <h2 className="text-2xl font-bold text-white mb-1">9-Week Plan</h2>
         <p className="text-sm text-gray-400">Marathon + 70.3 Triathlon</p>
       </div>
+
+      {/* Plan Reshape Info */}
+      <PlanReshapeInfo races={races} currentWeekPhase={currentWeek?.phase} />
 
       {/* Timeline */}
       <div className="space-y-2">

@@ -1,6 +1,6 @@
 'use client'
 
-import { Calendar, CalendarCheck, BarChart3, Trophy, ClipboardList } from 'lucide-react'
+import { Calendar, CalendarCheck, BarChart3, Trophy, ClipboardList, Search } from 'lucide-react'
 
 interface TabNavProps {
   activeTab: string
@@ -12,13 +12,14 @@ export default function TabNav({ activeTab, onTabChange }: TabNavProps) {
     { id: 'today', label: 'Vandaag', icon: CalendarCheck },
     { id: 'week', label: 'Week', icon: Calendar },
     { id: 'plan', label: 'Plan', icon: BarChart3 },
+    { id: 'discover', label: 'Ontdek', icon: Search },
     { id: 'races', label: 'Races', icon: Trophy },
     { id: 'log', label: 'Log', icon: ClipboardList },
   ]
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-[#0a0a0f] border-t border-[#222233] px-0">
-      <div className="flex justify-around">
+      <div className="flex justify-around overflow-x-auto">
         {tabs.map((tab) => {
           const Icon = tab.icon
           const isActive = activeTab === tab.id
@@ -27,7 +28,7 @@ export default function TabNav({ activeTab, onTabChange }: TabNavProps) {
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`flex flex-col items-center justify-center flex-1 py-3 px-2 transition-colors ${
+              className={`flex flex-col items-center justify-center flex-1 py-3 px-2 transition-colors min-w-fit ${
                 isActive
                   ? 'text-[#FF4444]'
                   : 'text-gray-400 hover:text-gray-300'

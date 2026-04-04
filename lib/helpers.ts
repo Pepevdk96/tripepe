@@ -1,5 +1,20 @@
 import { Workout, Week } from './trainingData'
 
+// Check if a date string matches today
+export const isToday = (dateStr: string): boolean => {
+  const today = new Date().toLocaleDateString('en-CA')
+  return dateStr === today
+}
+
+// Get today's date formatted in Dutch
+export const getTodayFormatted = (): string => {
+  return new Date().toLocaleDateString('nl-NL', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  })
+}
+
 // Calculate days until target date
 export const getDaysUntil = (dateStr: string): number => {
   const today = new Date(new Date().toLocaleDateString('en-CA'))
@@ -226,4 +241,29 @@ export const getRecoveryTips = (): string[] => {
     'Neem een warm bad of ga naar de sauna',
     'Zorg voor mentale rust en meditatie',
   ]
+}
+
+// Generate fallback workout based on original
+export const generateFallback = (workout: Workout): { duration: string; description: string } | null => {
+  if (workout.type === 'rest' || workout.type === 'race') return null
+
+  // Parse duration to minutes
+  const durationStr = workout.duration
+  if (!durationStr || durationStr === '-') return null
+
+  const minutes = parseInt(durationStr)
+  if (isNaN(minutes)) return null
+
+  const fallbackMinutes = Math.max(20, Math.round(minutes * 0.6))
+
+  const fallbackDescriptions: Record<string, string> = {
+    swim: `${fallbackMinutes}min: warm-up + hoofdset verkort, skip cooldown`,
+    bike: `${fallbackMinutes}min: focus op intervalblokken, verkort Z2 deel`,
+    run: `${fallbackMinutes}min: behoud intensiteit, verkort opbouw en cooldown`,
+  }
+
+  return {
+    duration: `${fallbackMinutes} min`,
+    description: fallbackDescriptions[workout.type] || `${fallbackMinutes}min verkorte versie`,
+  }
 }

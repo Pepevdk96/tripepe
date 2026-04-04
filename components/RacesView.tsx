@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react'
 import { marathonSplits, triathlonSplits } from '@/lib/trainingData'
 import type { Race } from '@/lib/trainingData'
 import RaceCountdown from './RaceCountdown'
+import RaceGoals from './RaceGoals'
 
 interface RacesViewProps {
   races: Race[]
@@ -22,6 +23,9 @@ export default function RacesView({ races }: RacesViewProps) {
         <p className="text-sm text-gray-400">Pacing strategy & splits</p>
       </div>
 
+      {/* Race Goals */}
+      <RaceGoals races={races} />
+
       {/* Race countdowns */}
       <div className="space-y-4">
         {races.map((race) => (
@@ -38,7 +42,7 @@ export default function RacesView({ races }: RacesViewProps) {
           className="w-full card-base flex items-center justify-between hover:bg-[#1a1a2e] transition-colors group"
         >
           <div className="text-left flex-1">
-            <h3 className="font-bold text-white mb-1">Marathon Rotterdam</h3>
+            <h3 className="font-bold text-white mb-1">Marathon Kopenhagen</h3>
             <p className="text-sm text-gray-400">Pacing splits & nutrition</p>
           </div>
           {expandedSplit === 'marathon' ? (
