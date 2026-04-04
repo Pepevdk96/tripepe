@@ -6,6 +6,7 @@ import { marathonSplits, triathlonSplits } from '@/lib/trainingData'
 import type { Race } from '@/lib/trainingData'
 import RaceCountdown from './RaceCountdown'
 import RaceGoals from './RaceGoals'
+import PlanReshapeInfo from './PlanReshapeInfo'
 
 interface RacesViewProps {
   races: Race[]
@@ -25,6 +26,9 @@ export default function RacesView({ races }: RacesViewProps) {
 
       {/* Race Goals */}
       <RaceGoals races={races} />
+
+      {/* Plan Reshape Info */}
+      <PlanReshapeInfo races={races} />
 
       {/* Race countdowns */}
       <div className="space-y-4">
