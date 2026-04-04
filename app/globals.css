@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-[#0a0a0f] text-white font-sans;
+  background-color: #0a0a0f;
+  color: #ffffff;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #141420;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333344;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #444455;
+}
+
+/* Gradients */
+.gradient-accent {
+  background: linear-gradient(135deg, #FF4444 0%, #FFD700 100%);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #FF4444 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Card styles */
+.card-base {
+  @apply bg-[#141420] rounded-xl p-4 shadow-lg;
+}
+
+.card-hover {
+  @apply card-base hover:bg-[#1a1a2e] transition-colors;
+}
+
+/* Intensity badges */
+.intensity-badge {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.intensity-easy {
+  @apply bg-green-900/30 text-green-400;
+}
+
+.intensity-moderate {
+  @apply bg-yellow-900/30 text-yellow-400;
+}
+
+.intensity-hard {
+  @apply bg-orange-900/30 text-orange-400;
+}
+
+.intensity-race {
+  @apply bg-red-900/30 text-red-400;
+}
+
+.intensity-rest {
+  @apply bg-gray-900/30 text-gray-400;
+}
+
+/* Sport color indicators */
+.sport-run {
+  @apply border-l-4 border-[#FF4444];
+}
+
+.sport-bike {
+  @apply border-l-4 border-[#00CC66];
+}
+
+.sport-swim {
+  @apply border-l-4 border-[#00AAFF];
+}
+
+.sport-rest {
+  @apply border-l-4 border-[#666688];
+}
+
+.sport-race {
+  @apply border-l-4 border-[#FFD700];
+}
+
+/* Buttons */
+.btn-primary {
+  @apply bg-gradient-to-r from-[#FF4444] to-[#FFD700] hover:shadow-lg transition-shadow text-white font-medium px-6 py-3 rounded-xl;
+}
+
+.btn-secondary {
+  @apply bg-[#1a1a2e] hover:bg-[#252540] transition-colors text-white font-medium px-6 py-3 rounded-xl border border-[#333344];
+}
+
+/* Animations */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 68, 68, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 68, 68, 0.8);
+  }
+}
+
+.glow-run {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Pulse animation */
+@keyframes pulse-custom {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.pulse-custom {
+  animation: pulse-custom 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
