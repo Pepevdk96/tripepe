@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ShoppingCart, ChevronDown, ChevronUp, Check, Copy, Apple } from 'lucide-react'
+import { ShoppingCart, ChevronDown, ChevronUp, Check, Copy } from 'lucide-react'
 import type { Week } from '@/lib/trainingData'
 
 interface GroceryListProps {
