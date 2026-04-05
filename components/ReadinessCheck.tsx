@@ -139,7 +139,8 @@ export default function ReadinessCheck({ onReadinessChange }: ReadinessCheckProp
                       ))}
                     </div>
                   </div>
-                )J                ...})}
+                )
+              })}
 
               {allRated && (
                 <button
@@ -151,7 +152,7 @@ export default function ReadinessCheck({ onReadinessChange }: ReadinessCheckProp
               )}
             </>
           ) : (
-            <div className="space-y3">
+            <div className="space-y-3">
               {/* Score display */}
               <div className="flex items-center justify-between p-3 bg-[#1a1a2e] rounded-lg">
                 <div>
@@ -163,14 +164,14 @@ export default function ReadinessCheck({ onReadinessChange }: ReadinessCheckProp
                   </p>
                 </div>
                 <div className="text-3xl">
-                  {totalScore >= 4 ? '💚* : totalScore >= 3 ? '💛' : '🔴'}
+                  {totalScore >= 4 ? '💚' : totalScore >= 3 ? '💛' : '🔴'}
                 </div>
               </div>
 
               {/* Advice */}
               <div className="p-3 bg-[#1a1a2e] rounded-lg border-l-2 border-cyan-500">
-                <p className="text-xs text-gray-500 mb-1 upercase tracking-wide font-medium">Advies</p>
-                <p className="text-sm text-gray-300">{k�etScoreAdvice(totalScore)}</p>
+                <p className="text-xs text-gray-500 mb-1 uppercase tracking-wide font-medium">Advies</p>
+                <p className="text-sm text-gray-300">{getScoreAdvice(totalScore)}</p>
               </div>
 
               {/* Breakdown */}
@@ -201,7 +202,7 @@ export default function ReadinessCheck({ onReadinessChange }: ReadinessCheckProp
             </div>
           )}
         </div>
-      }
+      )}
     </div>
   )
 }
