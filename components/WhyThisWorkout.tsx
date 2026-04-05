@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { HelpCircle, ChevronDown, ChevronUp } from 'lucide-react'
+import { CircleHelp, ChevronDown, ChevronUp } from 'lucide-react'
 import type { Workout } from '@/lib/trainingData'
 
 interface WhyThisWorkoutProps {
@@ -45,7 +45,7 @@ export default function WhyThisWorkout({ workout, weekPhase }: WhyThisWorkoutPro
     }
 
     if (workout.intensity === 'easy') {
-      return 'Bouwt mitochondriën op en versterkt bindweefsel. Essentieel voor volume zonder te veel belasting.'
+      return 'Bouwt mitochondriÃ«n op en versterkt bindweefsel. Essentieel voor volume zonder te veel belasting.'
     }
 
     if (workout.intensity === 'hard') {
@@ -63,7 +63,7 @@ export default function WhyThisWorkout({ workout, weekPhase }: WhyThisWorkoutPro
     }
 
     if (workout.type === 'swim') {
-      return 'Techniek en uithoudingsvermogen in het water. Efficiëntie is belangrijker dan snelheid.'
+      return 'Techniek en uithoudingsvermogen in het water. EfficiÃ«ntie is belangrijker dan snelheid.'
     }
 
     return 'Trainingsadaptatie en verbeteringen'
@@ -109,7 +109,7 @@ export default function WhyThisWorkout({ workout, weekPhase }: WhyThisWorkoutPro
         className="w-full flex items-center justify-between text-left group hover:opacity-90 transition-opacity"
       >
         <div className="flex items-center gap-3">
-          <HelpCircle size={20} className="text-purple-400 flex-shrink-0" />
+          <CircleHelp size={20} className="text-purple-400 flex-shrink-0" />
           <h3 className="font-semibold text-white">Waarom deze training?</h3>
         </div>
         {isOpen ? (
