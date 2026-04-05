@@ -21,7 +21,7 @@ import AdaptiveReplan from './AdaptiveReplan'
 import ReadinessCheck from './ReadinessCheck'
 import WeatherRoute from './WeatherRoute'
 import RaceWeekAutopilot from './RaceWeekAutopilot'
-import { Play, Lightbulb, Clock, Zap, CheckCircle2 } from 'lucide-react'
+import { Play, Lightbulb, Clock, Zap, CircleCheck } from 'lucide-react'
 
 interface TodayViewProps {
   trainingPlan: Week[]
@@ -43,7 +43,7 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
         <h2 className="text-2xl font-bold text-white mb-1">{getGreeting()}</h2>
         <p className="text-gray-400 text-sm capitalize">{getTodayFormatted()}</p>
         <p className="text-gray-500 text-xs mt-1">
-          {currentWeek && `Week ${currentWeek.number} — ${currentWeek.phase}`}
+          {currentWeek && `Week ${currentWeek.number} â ${currentWeek.phase}`}
         </p>
       </div>
 
@@ -86,7 +86,7 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
                 <span className="text-gray-300 font-medium">{todayWorkout.title}</span>
                 {todayWorkout.paceTarget && (
                   <>
-                    <span className="text-gray-600"> • </span>
+                    <span className="text-gray-600"> â¢ </span>
                     <span className="text-gray-400">Doel: {todayWorkout.paceTarget}</span>
                   </>
                 )}
@@ -105,29 +105,29 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
           {todayWorkout.type !== 'rest' && todayWorkout.type !== 'race' && (
             <div className="card-base bg-[#12121f] border border-blue-700/30">
               <div className="flex items-start gap-3">
-                <CheckCircle2 size={18} className="text-blue-400 flex-shrink-0 mt-0.5" />
+                <CircleCheck size={18} className="text-blue-400 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
                   <p className="text-sm font-medium text-blue-300 mb-2">Voorbereiding</p>
                   <ul className="space-y-1 text-xs text-gray-400">
                     {todayWorkout.type === 'swim' && (
                       <>
-                        <li>• Neem zwembril mee</li>
-                        <li>• Pak badmuts in</li>
-                        <li>• Controleer pullbuoy in tas</li>
+                        <li>â¢ Neem zwembril mee</li>
+                        <li>â¢ Pak badmuts in</li>
+                        <li>â¢ Controleer pullbuoy in tas</li>
                       </>
                     )}
                     {todayWorkout.type === 'bike' && (
                       <>
-                        <li>• Check bandenspanning</li>
-                        <li>• Vul bidons met drank</li>
-                        <li>• Zet fietscomputer aan</li>
+                        <li>â¢ Check bandenspanning</li>
+                        <li>â¢ Vul bidons met drank</li>
+                        <li>â¢ Zet fietscomputer aan</li>
                       </>
                     )}
                     {todayWorkout.type === 'run' && (
                       <>
-                        <li>• Leg kleding klaar</li>
-                        <li>• Vul waterfles</li>
-                        <li>• Check weersvoorspelling</li>
+                        <li>â¢ Leg kleding klaar</li>
+                        <li>â¢ Vul waterfles</li>
+                        <li>â¢ Check weersvoorspelling</li>
                       </>
                     )}
                   </ul>
@@ -144,12 +144,12 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
                 <div className="flex-1">
                   <p className="text-sm font-medium text-yellow-300 mb-2">Race Day Checklist</p>
                   <ul className="space-y-1 text-xs text-gray-400">
-                    <li>• Zet wekker op tijd</li>
-                    <li>• Eet goed ontbijt (carbs + proteïne)</li>
-                    <li>• Controleer weersomstandigheden</li>
-                    <li>• Pak race kit in</li>
-                    <li>• Zorg voor voldoende voeding</li>
-                    <li>• Blijf relaxed, je bent klaar!</li>
+                    <li>â¢ Zet wekker op tijd</li>
+                    <li>â¢ Eet goed ontbijt (carbs + proteÃ¯ne)</li>
+                    <li>â¢ Controleer weersomstandigheden</li>
+                    <li>â¢ Pak race kit in</li>
+                    <li>â¢ Zorg voor voldoende voeding</li>
+                    <li>â¢ Blijf relaxed, je bent klaar!</li>
                   </ul>
                 </div>
               </div>
@@ -160,14 +160,14 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
           {todayWorkout.type === 'rest' && (
             <div className="card-base bg-gradient-to-br from-purple-900/20 to-purple-800/10 border border-purple-700/30">
               <div className="flex items-start gap-3">
-                <CheckCircle2 size={18} className="text-purple-400 flex-shrink-0 mt-0.5" />
+                <CircleCheck size={18} className="text-purple-400 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
                   <p className="text-sm font-medium text-purple-300 mb-2">Recovery Tips</p>
                   <ul className="space-y-1 text-xs text-gray-400">
-                    <li>• Zorg voor voldoende water</li>
-                    <li>• Slaap 7-9 uur per nacht</li>
-                    <li>• Eet proteïne-rijk voedsel</li>
-                    <li>• Doe wat lichte stretching</li>
+                    <li>â¢ Zorg voor voldoende water</li>
+                    <li>â¢ Slaap 7-9 uur per nacht</li>
+                    <li>â¢ Eet proteÃ¯ne-rijk voedsel</li>
+                    <li>â¢ Doe wat lichte stretching</li>
                   </ul>
                 </div>
               </div>
