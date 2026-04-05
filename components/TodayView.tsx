@@ -19,6 +19,8 @@ import DuringFueling from './DuringFueling'
 import RouteSuggestion from './RouteSuggestion'
 import AdaptiveReplan from './AdaptiveReplan'
 import ReadinessCheck from './ReadinessCheck'
+import WeatherRoute from './WeatherRoute'
+import RaceWeekAutopilot from './RaceWeekAutopilot'
 import { Play, Lightbulb, Clock, Zap, CheckCircle2 } from 'lucide-react'
 
 interface TodayViewProps {
@@ -55,6 +57,9 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
           />
         ))}
       </div>
+
+      {/* Race Week Autopilot */}
+      <RaceWeekAutopilot races={races} />
 
       {/* Adaptive Replan for missed workouts */}
       {currentWeek && (
@@ -120,7 +125,7 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
                     )}
                     {todayWorkout.type === 'run' && (
                       <>
-                       <li>• Leg kleding klaar</li>
+                        <li>• Leg kleding klaar</li>
                         <li>• Vul waterfles</li>
                         <li>• Check weersvoorspelling</li>
                       </>
@@ -169,7 +174,7 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
             </div>
           )}
 
-          {/* Fallback workoutt option */}
+          {/* Fallback workout option */}
           <FallbackWorkout workout={todayWorkout} />
 
           {/* Why This Workout explanation */}
@@ -187,6 +192,11 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
             <DuringFueling workout={todayWorkout} />
           )}
 
+
+          {/* Weather & Route Advice */}
+          {todayWorkout.type !== 'rest' && todayWorkout.type !== 'swim' && (
+            <WeatherRoute workout={todayWorkout} />
+          )}
 
           {/* Route Suggestion */}
           {todayWorkout.type !== 'rest' && todayWorkout.type !== 'swim' && (
