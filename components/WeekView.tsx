@@ -6,6 +6,7 @@ import { getCurrentWeek, formatDate, isToday, getTodayFormatted } from '@/lib/he
 import type { Week } from '@/lib/trainingData'
 import WorkoutCard from './WorkoutCard'
 import WeeklyStressBalance from './WeeklyStressBalance'
+import GroceryList from './GroceryList'
 
 interface WeekViewProps {
   trainingPlan: Week[]
@@ -140,6 +141,9 @@ export default function WeekView({ trainingPlan }: WeekViewProps) {
 
       {/* Weekly Stress Balance */}
       <WeeklyStressBalance trainingPlan={trainingPlan} />
+
+      {/* Grocery List */}
+      <GroceryList currentWeek={week} />
 
       {/* Key workout highlight */}
       {week.keyWorkout && (
