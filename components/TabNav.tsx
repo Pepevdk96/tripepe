@@ -16,6 +16,7 @@ export default function TabNav({ activeTab, onTabChange }: TabNavProps) {
     { id: 'races', label: 'Races', icon: Trophy },
     { id: 'log', label: 'Log', icon: ClipboardList },
     { id: 'coach', label: 'Coach', icon: MessageCircle },
+    { id: 'coach', label: 'Coach', icon: MessageCircle },
   ]
 
   return (

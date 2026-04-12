@@ -10,6 +10,7 @@ import RacesView from '@/components/RacesView'
 import LogView from '@/components/LogView'
 import RaceFinder from '@/components/RaceFinder'
 import CoachChat from '@/components/coach-chat'
+import CoachChat from '@/components/coach-chat'
 import { useTriPepeData } from '@/lib/useTriPepeData'
 import { RefreshCw } from 'lucide-react'
 
@@ -31,6 +32,8 @@ export default function Home() {
         return <RaceFinder />
       case 'log':
         return <LogView completedWorkouts={completedWorkouts} garminSync={garminSync} onSync={refetch} />
+      case 'coach':
+        return <CoachChat />
       case 'coach':
         return <CoachChat />
       default:
