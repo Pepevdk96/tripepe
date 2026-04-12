@@ -1,6 +1,6 @@
 'use client'
 
-import { Calendar, CalendarCheck, BarChart3, Trophy, ClipboardList, Search } from 'lucide-react'
+import { Calendar, CalendarCheck, BarChart3, Trophy, ClipboardList, Search, MessageCircle } from 'lucide-react'
 
 interface TabNavProps {
   activeTab: string
@@ -15,6 +15,7 @@ export default function TabNav({ activeTab, onTabChange }: TabNavProps) {
     { id: 'discover', label: 'Ontdek', icon: Search },
     { id: 'races', label: 'Races', icon: Trophy },
     { id: 'log', label: 'Log', icon: ClipboardList },
+    { id: 'coach', label: 'Coach', icon: MessageCircle },
   ]
 
   return (
