@@ -7,7 +7,6 @@ import { generateFallback } from '@/lib/helpers'
 
 interface AdaptiveReplanProps {
   weekSessions: Workout[]
-  completedWorkouts?: any[]
 }
 
 interface SessionStatus {
@@ -17,7 +16,7 @@ interface SessionStatus {
   isKeyWorkout: boolean
 }
 
-export default function AdaptiveReplan({ weekSessions, completedWorkouts = [] }: AdaptiveReplanProps) {
+export default function AdaptiveReplan({ weekSessions }: AdaptiveReplanProps) {
   const [expandedSession, setExpandedSession] = useState<string | null>(null)
   const [selectedReplans, setSelectedReplans] = useState<Record<string, string>>({})
 
@@ -25,47 +24,16 @@ export default function AdaptiveReplan({ weekSessions, completedWorkouts = [] }:
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
-  // Check if a planned workout was completed by matching date + sport type
-  const normalizeSport = (sport: string): string => {
-    const s = (sport || '').toLowerCase()
-    if (s.includes('swim') || s.includes('pool') || s.includes('lap_swim')) return 'swim'
-    if (s.includes('run') || s.includes('trail') || s.includes('treadmill')) return 'run'
-    if (s.includes('bike') || s.includes('cycl') || s.includes('fiets') || s.includes('virtual_ride')) return 'bike'
-    if (s.includes('strength') || s.includes('weight') || s.includes('gym') || s.includes('kracht')) return 'strength'
-    return s
-  }
-
-  console.log('[AdaptiveReplan] completedWorkouts count:', completedWorkouts.length)
-  if (completedWorkouts.length > 0) {
-    console.log('[AdaptiveReplan] sample completed:', completedWorkouts.slice(0, 3).map(cw => ({ date: cw.date, sport: cw.sport, name: cw.name })))
-  }
-  console.log('[AdaptiveReplan] weekSessions:', weekSessions.map(ws => ({ date: ws.date, type: ws.type, title: ws.title })))
-
-  const isWorkoutCompleted = (workout: Workout): boolean => {
-    const plannedDate = workout.date?.substring(0, 10)
-    const match = completedWorkouts.some(cw => {
-      const cwDate = cw.date?.substring(0, 10)
-      if (cwDate !== plannedDate) return false
-      const cwType = normalizeSport(cw.sport)
-      return cwType === workout.type
-    })
-    if (workout.type !== 'rest') {
-      console.log(`[AdaptiveReplan] ${workout.date} ${workout.type}: completed=${match}`)
-    }
-    return match
-  }
-
   const sessionStatuses: SessionStatus[] = weekSessions.map((workout) => {
     const workoutDate = new Date(workout.date)
     workoutDate.setHours(0, 0, 0, 0)
     const isPast = workoutDate < today
     const isNonRest = workout.type !== 'rest' && workout.type !== 'race'
-    const completed = isWorkoutCompleted(workout)
 
     return {
       workout,
-      completed,
-      missed: isPast && isNonRest && !completed,
+      completed: false, // TODO: integrate with actual completion data from Supabase
+      missed: isPast && isNonRest, // Past non-rest workouts are considered missed if not completed
       isKeyWorkout: workout.isKeyWorkout || false,
     }
   })

@@ -229,7 +229,7 @@ export default function WeeklyStressBalance({ trainingPlan }: WeeklyStressBalanc
                 {Object.entries(sportMinutes).map(([sport, mins]) => (
                   <div key={sport} className="flex items-center gap-1">
                     <div
-                      className="w-2 h-2 rounded-full"
+                      className="v-2 h-2 rounded-full"
                       style={{ backgroundColor: sportColors[sport] }}
                     />
                     <span className="text-[10px] text-gray-400 capitalize">

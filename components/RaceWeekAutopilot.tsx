@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Rocket, ChevronDown, ChevronUp, Check, AlertTriangle, Zap, Moon, Droplets, Apple } from 'lucide-react'
+import { Rocket, ChevronDown, ChevronUp, Check, AlertTriangle, Zap, Moon, Droplets, Leaf } from 'lucide-react'
 import type { Race } from '@/lib/trainingData'
 
 interface RaceWeekAutopilotProps {
@@ -46,23 +46,23 @@ function generateRaceWeekPlan(race: Race): DayPlan[] {
       plan = isMarathon ? {
         training: 'RACE DAY! Warming-up: 10 min joggen + 4x strides',
         nutrition: 'Ontbijt 3u voor start: havermout + banaan + honing. Gel 15 min voor start.',
-        sleep: 'Vroeg op — neem de tijd voor je routine',
+        sleep: 'Vroeg op â neem de tijd voor je routine',
         mental: 'Vertrouw je training. Begin conservatief, eindig sterk.',
-        icon: '🏁',
+        icon: 'ð',
       } : {
         training: 'RACE DAY! T1/T2 check. Warming-up: 5 min joggen + dynamisch stretchen',
         nutrition: 'Ontbijt 3u voor start: rijst + ei + brood. Drink 500ml in de ochtend.',
-        sleep: 'Vroeg op — check alle gear, T1 en T2 bags',
+        sleep: 'Vroeg op â check alle gear, T1 en T2 bags',
         mental: 'Geniet ervan. Swim: relax. Bike: pacing. Run: character.',
-        icon: '🏁',
+        icon: 'ð',
       }
     } else if (i === 1) {
       plan = {
         training: 'Compleet rust. Optioneel: 15 min wandelen',
         nutrition: 'Carb loading dag 2: pasta + brood + rijst. Vermijd vezels en zuivel. Drink 2-3L water.',
-        sleep: 'Vroeg naar bed. Het is OK als je niet goed slaapt — de nacht ervoor telt meer.',
+        sleep: 'Vroeg naar bed. Het is OK als je niet goed slaapt â de nacht ervoor telt meer.',
         mental: 'Leg alles klaar: racekleding, startnummer, gels, schoenen. Visualiseer je race.',
-        icon: '😴',
+        icon: 'ð´',
       }
     } else if (i === 2) {
       plan = {
@@ -72,7 +72,7 @@ function generateRaceWeekPlan(race: Race): DayPlan[] {
         nutrition: 'Carb loading start: +50% koolhydraten. Witte rijst, pasta, brood. Drink extra.',
         sleep: 'Slaap 8-9 uur. Dit is de belangrijkste nacht!',
         mental: 'Geen stress. Je bent klaar. Vertrouw het proces.',
-        icon: '🍝',
+        icon: 'ð',
       }
     } else if (i === 3) {
       plan = {
@@ -82,17 +82,17 @@ function generateRaceWeekPlan(race: Race): DayPlan[] {
         nutrition: 'Normale maaltijden, iets meer koolhydraten. Vermijd alcohol en experiment eten.',
         sleep: 'Probeer 8 uur slaap. Vermijd schermen voor bedtijd.',
         mental: 'Bekijk het parcours. Plan je race strategie.',
-        icon: '🗺️',
+        icon: 'ðºï¸',
       }
     } else if (i === 4) {
       plan = {
         training: isMarathon
-          ? '30 min easy run. Last echte workout — hou het licht.'
+          ? '30 min easy run. Last echte workout â hou het licht.'
           : '30 min easy bike of 20 min easy swim. Alles Z1-Z2.',
         nutrition: 'Eet normaal en gezond. Focus op slaap en hydratatie.',
         sleep: 'Begin je slaapritme aan te passen: eerder naar bed.',
         mental: 'Check je gear lijst. Bestell wat je nog mist.',
-        icon: '✅',
+        icon: 'â',
       }
     } else if (i === 5) {
       plan = {
@@ -102,17 +102,17 @@ function generateRaceWeekPlan(race: Race): DayPlan[] {
         nutrition: 'Normale voeding. Vermijd nieuw eten. Drink voldoende water.',
         sleep: 'Normale routine. Geen late avonden meer.',
         mental: 'Verlaag stress. Geen zware taken op werk plannen.',
-        icon: '🏃',
+        icon: 'ð',
       }
     } else {
       plan = {
         training: isMarathon
           ? '40 min easy run. Laatste "normale" training.'
           : '40 min moderate bike of 30 min easy run. Begin af te bouwen.',
-        nutrition: 'Eet goed en gevarieerd. Begin cafeïne te verminderen als je dat wilt.',
+        nutrition: 'Eet goed en gevarieerd. Begin cafeÃ¯ne te verminderen als je dat wilt.',
         sleep: 'Zorg voor een goede nachtrust. Vermijd alcohol.',
         mental: 'Maak een race plan: splits, voeding, mentale ankerpunten.',
-        icon: '📋',
+        icon: 'ð',
       }
     }
 
@@ -187,7 +187,7 @@ export default function RaceWeekAutopilot({ races }: RaceWeekAutopilotProps) {
                       : 'bg-[#1a1a2e] border border-gray-700/30 text-gray-400'
                   }`}
                 >
-                  {race.name} — {getDaysUntilRace(race.date)}d
+                  {race.name} â {getDaysUntilRace(race.date)}d
                 </button>
               ))}
             </div>
@@ -252,7 +252,7 @@ export default function RaceWeekAutopilot({ races }: RaceWeekAutopilotProps) {
                   {isDayExpanded && (
                     <div className="mt-3 space-y-2 border-t border-gray-700/30 pt-2">
                       <div className="flex items-start gap-2">
-                        <Apple size={12} className="text-green-400 mt-0.5 flex-shrink-0" />
+                        <Leaf size={12} className="text-green-400 mt-0.5 flex-shrink-0" />
                         <div>
                           <p className="text-xs text-green-400 font-medium">Voeding</p>
                           <p className="text-xs text-gray-400">{dayPlan.nutrition}</p>
@@ -287,11 +287,11 @@ export default function RaceWeekAutopilot({ races }: RaceWeekAutopilotProps) {
                 <div>
                   <p className="text-xs text-orange-400 font-medium">Laatste dagen checklist</p>
                   <ul className="mt-1 space-y-0.5">
-                    <li className="text-xs text-gray-400">• Startnummer en chip ophalen</li>
-                    <li className="text-xs text-gray-400">• Race outfit klaarleggen</li>
-                    <li className="text-xs text-gray-400">• Gels en voeding in race belt</li>
-                    <li className="text-xs text-gray-400">• Garmin opladen + race activity instellen</li>
-                    <li className="text-xs text-gray-400">• Geen nieuw eten of nieuwe schoenen!</li>
+                    <li className="text-xs text-gray-400">â¢ Startnummer en chip ophalen</li>
+                    <li className="text-xs text-gray-400">â¢ Race outfit klaarleggen</li>
+                    <li className="text-xs text-gray-400">â¢ Gels en voeding in race belt</li>
+                    <li className="text-xs text-gray-400">â¢ Garmin opladen + race activity instellen</li>
+                    <li className="text-xs text-gray-400">â¢ Geen nieuw eten of nieuwe schoenen!</li>
                   </ul>
                 </div>
               </div>

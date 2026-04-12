@@ -1,6 +1,6 @@
 'use client'
 
-import { Waves, Bike, Footprints, Zzz, Trophy } from 'lucide-react'
+import { Waves, Bike, Footprints, Moon, Trophy } from 'lucide-react'
 import { Workout } from '@/lib/trainingData'
 import { getSportColor, getIntensityColor, getIntensityLabel } from '@/lib/helpers'
 
@@ -25,7 +25,7 @@ export default function WorkoutCard({
       case 'run':
         return <Footprints size={20} />
       case 'rest':
-        return <Zzz size={20} />
+        return <Moon size={20} />
       case 'race':
         return <Trophy size={20} />
       default:
@@ -84,17 +84,17 @@ export default function WorkoutCard({
           <div className="flex items-center gap-3 flex-wrap">
             {workout.duration && (
               <span className="text-xs text-gray-500 bg-[#1a1a2e] px-2 py-1 rounded">
-                ⏱ {workout.duration}
+                â± {workout.duration}
               </span>
             )}
             {workout.distance && (
               <span className="text-xs text-gray-500 bg-[#1a1a2e] px-2 py-1 rounded">
-                📍 {workout.distance}
+                ð {workout.distance}
               </span>
             )}
             {workout.paceTarget && (
               <span className="text-xs text-gray-500 bg-[#1a1a2e] px-2 py-1 rounded">
-                ⚡ {workout.paceTarget}
+                â¡ {workout.paceTarget}
               </span>
             )}
           </div>
