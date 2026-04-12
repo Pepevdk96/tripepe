@@ -14,6 +14,7 @@ interface DailyViewProps {
   onCompleteWorkout?: (workoutId: string, rpe: number, notes?: string, feeling?: string) => Promise<void>
   isLoading?: boolean
   lastSyncTime?: string
+  error?: string | null
 }
 
 /**
@@ -65,6 +66,7 @@ export function DailyView({
   onCompleteWorkout,
   isLoading = false,
   lastSyncTime,
+  error,
 }: DailyViewProps) {
   const [selectedWorkout, setSelectedWorkout] = useState<PlannedWorkout | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -135,27 +137,40 @@ export function DailyView({
           </button>
         </div>
 
-        {/* Rest Day Message */}
-        <div className="bg-[#141420] rounded-xl border border-[#242430] p-6 space-y-4">
-          <div className="text-5xl text-center">😴</div>
-          <div className="text-center space-y-2">
-            <h2 className="text-xl font-bold text-white">Rust dag</h2>
-            <p className="text-sm text-gray-400">
-              Je hebt vandaag geen training gepland. Dit is een goed moment om te herstellen.
-            </p>
+        {/* Error Alert */}
+        {error && (
+          <div className="bg-red-500/10 border border-red-500 rounded-lg p-4 flex items-start gap-3">
+            <AlertCircle size={20} className="text-red-400 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-semibold text-red-400">Fout bij laden</p>
+              <p className="text-xs text-red-300 mt-1">{error}</p>
+            </div>
           </div>
+        )}
 
-          {/* Recovery Tips */}
-          <div className="bg-[#0a0a0f] rounded-lg p-4 space-y-2">
-            <p className="text-xs font-semibold text-gray-500 uppercase">Herstel tips</p>
-            <ul className="text-sm text-gray-400 space-y-1">
-              <li>• Zorg voor voldoende slaap (7-9 uur)</li>
-              <li>• Drink veel water</li>
-              <li>• Eet voedzaam</li>
-              <li>• Doe wat lichte stretching</li>
-            </ul>
+        {/* Rest Day Message */}
+        {!error && (
+          <div className="bg-[#141420] rounded-xl border border-[#242430] p-6 space-y-4">
+            <div className="text-5xl text-center">😴</div>
+            <div className="text-center space-y-2">
+              <h2 className="text-xl font-bold text-white">Rust dag</h2>
+              <p className="text-sm text-gray-400">
+                Je hebt vandaag geen training gepland. Dit is een goed moment om te herstellen.
+              </p>
+            </div>
+
+            {/* Recovery Tips */}
+            <div className="bg-[#0a0a0f] rounded-lg p-4 space-y-2">
+              <p className="text-xs font-semibold text-gray-500 uppercase">Herstel tips</p>
+              <ul className="text-sm text-gray-400 space-y-1">
+                <li>• Zorg voor voldoende slaap (7-9 uur)</li>
+                <li>• Drink veel water</li>
+                <li>• Eet voedzaam</li>
+                <li>• Doe wat lichte stretching</li>
+              </ul>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Sync Info */}
         {lastSyncTime && (
@@ -190,6 +205,17 @@ export function DailyView({
         </button>
       </div>
 
+      {/* Error Alert */}
+      {error && (
+        <div className="bg-red-500/10 border border-red-500 rounded-lg p-4 flex items-start gap-3">
+          <AlertCircle size={20} className="text-red-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm font-semibold text-red-400">Fout bij laden</p>
+            <p className="text-xs text-red-300 mt-1">{error}</p>
+          </div>
+        </div>
+      )}
+
       {/* Primary Workout (featured) */}
       {primary && (
         <div>
@@ -208,7 +234,7 @@ export function DailyView({
       {secondary.length > 0 && (
         <div className="space-y-3">
           <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">
-            Tweede training
+            {primary?.sport === 'brick' ? 'Tweede sport in brick sessie' : 'Tweede training'}
           </p>
           {secondary.map((workout) => (
             <WorkoutCardDaily

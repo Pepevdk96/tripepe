@@ -2,9 +2,10 @@
  * Workout TypeScript Types
  *
  * Matches the API contract from the architect plan for fetching and logging workouts.
+ * Backend sends camelCase JSON, which is deserialized directly to these types.
  */
 
-export type SportType = 'swim' | 'bike' | 'run' | 'rest'
+export type SportType = 'swim' | 'bike' | 'run' | 'rest' | 'brick'
 
 export type IntensityLevel = 'easy' | 'recovery' | 'threshold' | 'interval' | 'long' | 'brick'
 
@@ -25,6 +26,7 @@ export interface WorkoutTarget {
 
 /**
  * Planned Workout - fetched from GET /api/v1/workouts/today
+ * Backend sends all fields in camelCase (matching API contract)
  */
 export interface PlannedWorkout {
   id: string
@@ -37,28 +39,30 @@ export interface PlannedWorkout {
   estimatedFinishTime?: string
   intensity: IntensityLevel
   isKeyWorkout: boolean
-  targets: {
-    primary?: WorkoutTarget
-    secondary?: WorkoutTarget[]
-  }
+  labelSecondary?: string
+  primaryTarget?: WorkoutTarget
+  secondaryTargets?: WorkoutTarget[]
   color: string
   icon: string
   order: number
   isCompleted: boolean
   isMissed: boolean
+  dayOfWeek: string
+  rationale?: string
 }
 
 /**
- * Workout Completion Data - sent to POST /api/v1/workouts/{id}/complete
+ * Workout Completion Data - sent to POST /api/v1/workouts/complete
  */
 export interface WorkoutCompletion {
-  workoutId: string
+  plannedWorkoutId: string
   rpe: number
   actualDistanceMeters?: number
   actualDurationSeconds?: number
+  avgHeartRate?: number
+  maxHeartRate?: number
   notes?: string
-  feeling?: string
-  timestamp: string
+  garminActivityId?: string
 }
 
 /**
@@ -66,19 +70,22 @@ export interface WorkoutCompletion {
  */
 export interface CompletedWorkout {
   id: string
-  workoutId: string
+  plannedWorkoutId: string
   sport: SportType
-  title: string
   date: string
   rpe: number
   actualDistanceMeters?: number
   actualDurationSeconds?: number
   avgHeartRate?: number
-  avgPaceSecondsPerKm?: number
-  avgPowerWatts?: number
+  maxHeartRate?: number
   notes?: string
-  feeling?: string
-  completedAt: string
+  matchScore: number
+  matchScoreDetails?: {
+    distanceDiffPct: number
+    durationDiffPct: number
+    notes: string
+  }
+  createdAt: string
 }
 
 /**
@@ -89,6 +96,16 @@ export interface DailyWorkoutResponse {
   dayOfWeek: string
   timezone: string
   workouts: PlannedWorkout[]
+  lastSync: string
+  hasMissedWorkout: boolean
+  missedWorkoutNote?: string | null
+  taperStatus?: string | null
+  raceDay: boolean
+  raceInfo?: {
+    raceName: string
+    raceDate: string
+    distance: string
+  } | null
 }
 
 /**
@@ -142,6 +159,11 @@ export const SPORT_COLORS: Record<SportType, { hex: string; tailwind: string; bg
     tailwind: 'text-gray-400',
     bg: 'bg-gray-500/10',
   },
+  brick: {
+    hex: '#F59E0B',
+    tailwind: 'text-amber-500',
+    bg: 'bg-amber-500/10',
+  },
 }
 
 /**
@@ -154,4 +176,54 @@ export const INTENSITY_LABELS: Record<IntensityLevel, string> = {
   interval: 'Interval',
   long: 'Lang',
   brick: 'Brick',
+}
+
+/**
+ * Helper function to normalize PlannedWorkout data from backend
+ * Handles conversion of targets field structure for backward compatibility
+ */
+export function normalizePlannedWorkout(workout: unknown): PlannedWorkout {
+  const data = workout as Record<string, unknown>
+
+  // Support both old nested structure (targets.primary/secondary)
+  // and new top-level structure (primaryTarget/secondaryTargets)
+  const primaryTarget = (data.primaryTarget ||
+    (typeof data.targets === 'object' && data.targets !== null
+      ? (data.targets as Record<string, unknown>).primary
+      : undefined)) as WorkoutTarget | undefined
+
+  const secondaryTargets = (data.secondaryTargets ||
+    (typeof data.targets === 'object' && data.targets !== null
+      ? (data.targets as Record<string, unknown>).secondary
+      : undefined)) as WorkoutTarget[] | undefined
+
+  return {
+    id: String(data.id),
+    planId: String(data.planId || data.plan_id || ''),
+    sport: String(data.sport) as SportType,
+    title: String(data.title),
+    description: String(data.description),
+    distanceMeters: typeof data.distanceMeters === 'number' ? data.distanceMeters : undefined,
+    durationSeconds: typeof data.durationSeconds === 'number' ? data.durationSeconds : undefined,
+    estimatedFinishTime: data.estimatedFinishTime ? String(data.estimatedFinishTime) : undefined,
+    intensity: String(data.intensity) as IntensityLevel,
+    isKeyWorkout: Boolean(data.isKeyWorkout || data.is_key_workout),
+    labelSecondary: data.labelSecondary ? String(data.labelSecondary) : undefined,
+    primaryTarget,
+    secondaryTargets: Array.isArray(secondaryTargets) ? secondaryTargets : undefined,
+    color: String(data.color || getColorForSport(String(data.sport) as SportType)),
+    icon: String(data.icon || String(data.sport)),
+    order: typeof data.order === 'number' ? data.order : 1,
+    isCompleted: Boolean(data.isCompleted || data.is_completed),
+    isMissed: Boolean(data.isMissed || data.is_missed),
+    dayOfWeek: String(data.dayOfWeek || data.day_of_week || ''),
+    rationale: data.rationale ? String(data.rationale) : undefined,
+  }
+}
+
+/**
+ * Get default color for a sport type
+ */
+function getColorForSport(sport: SportType): string {
+  return SPORT_COLORS[sport]?.hex || '#9CA3AF'
 }

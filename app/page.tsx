@@ -19,7 +19,7 @@ export default function Home() {
   const renderView = () => {
     switch (activeTab) {
       case 'today':
-        return <TodayView trainingPlan={trainingPlan} races={races} />
+        return <TodayView trainingPlan={trainingPlan} races={races} completedWorkouts={completedWorkouts} />
       case 'week':
         return <WeekView trainingPlan={trainingPlan} />
       case 'plan':
@@ -31,7 +31,7 @@ export default function Home() {
       case 'log':
         return <LogView completedWorkouts={completedWorkouts} garminSync={garminSync} onSync={refetch} />
       default:
-        return <TodayView trainingPlan={trainingPlan} races={races} />
+        return <TodayView trainingPlan={trainingPlan} races={races} completedWorkouts={completedWorkouts} />
     }
   }
 

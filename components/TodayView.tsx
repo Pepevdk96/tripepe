@@ -17,14 +17,19 @@ import WhyThisWorkout from './WhyThisWorkout'
 import FuelingGuidance from './FuelingGuidance'
 import DuringFueling from './DuringFueling'
 import RouteSuggestion from './RouteSuggestion'
+import AdaptiveReplan from './AdaptiveReplan'
+import ReadinessCheck from './ReadinessCheck'
+import WeatherRoute from './WeatherRoute'
+import RaceWeekAutopilot from './RaceWeekAutopilot'
 import { Play, Lightbulb, Clock, Zap, CheckCircle2 } from 'lucide-react'
 
 interface TodayViewProps {
   trainingPlan: Week[]
   races: Race[]
+  completedWorkouts?: any[]
 }
 
-export default function TodayView({ trainingPlan, races }: TodayViewProps) {
+export default function TodayView({ trainingPlan, races, completedWorkouts = [] }: TodayViewProps) {
   const todayWorkout = getTodayWorkout(trainingPlan)
   const currentWeek = getCurrentWeek(trainingPlan)
   const [showTip, setShowTip] = useState(false)
@@ -54,6 +59,14 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
         ))}
       </div>
 
+      {/* Race Week Autopilot */}
+      <RaceWeekAutopilot races={races} />
+
+      {/* Adaptive Replan for missed workouts */}
+      {currentWeek && (
+        <AdaptiveReplan weekSessions={currentWeek.sessions} completedWorkouts={completedWorkouts} />
+      )}
+
       {/* Today's workout */}
       {todayWorkout ? (
         <div className="space-y-3">
@@ -81,6 +94,9 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
               </p>
             </div>
           )}
+
+          {/* Readiness Check */}
+          <ReadinessCheck />
 
           <div className="glow-run">
             <WorkoutCard workout={todayWorkout} />
@@ -177,6 +193,11 @@ export default function TodayView({ trainingPlan, races }: TodayViewProps) {
             <DuringFueling workout={todayWorkout} />
           )}
 
+
+          {/* Weather & Route Advice */}
+          {todayWorkout.type !== 'rest' && todayWorkout.type !== 'swim' && (
+            <WeatherRoute workout={todayWorkout} />
+          )}
 
           {/* Route Suggestion */}
           {todayWorkout.type !== 'rest' && todayWorkout.type !== 'swim' && (

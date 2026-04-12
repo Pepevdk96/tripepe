@@ -30,16 +30,19 @@ export function WorkoutCompletionModal({
     if (rpe === null) return
 
     try {
+      // Show loading state immediately - prevents double-submit
       setSubmitted(true)
       await onSubmit(rpe, notes || undefined, feeling || undefined)
-      // Reset form after successful submission
+      // Only close after successful submission
       setRpe(null)
       setNotes('')
       setFeeling('')
+      setSubmitted(false)
       onClose()
     } catch (error) {
       setSubmitted(false)
       console.error('Failed to log workout:', error)
+      // Error is handled by parent component's error display
     }
   }
 

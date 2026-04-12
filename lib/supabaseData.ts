@@ -164,6 +164,8 @@ export async function fetchRaces(): Promise<Race[]> {
       target,
       type: (r.race_type === 'marathon' ? 'marathon' : 'triathlon') as Race['type'],
       distance: r.race_type === 'marathon' ? '42.195 km' : r.race_type === '70.3' ? '113 km' : r.race_type,
+      priority: r.priority || undefined,
+      status: r.status || 'upcoming',
     }
   })
 }
@@ -197,18 +199,21 @@ export async function fetchAthleteProfile(): Promise<AthleteProfile | null> {
 
 // Fetch completed workouts (from Garmin sync)
 export async function fetchCompletedWorkouts() {
+  console.log('[TriPepe] Fetching completed workouts for user:', DEFAULT_USER_ID)
+
   const { data, error } = await supabase
     .from('completed_workouts')
     .select('*')
     .eq('user_id', DEFAULT_USER_ID)
     .order('date', { ascending: false })
-    .limit(50)
+    .limit(500)
 
   if (error) {
-    console.error('Error fetching completed workouts:', error)
+    console.error('[TriPepe] Error fetching completed workouts:', error)
     return []
   }
 
+  console.log(`[TriPepe] Got ${data?.length || 0} completed workouts`)
   return data || []
 }
 
@@ -223,19 +228,65 @@ export async function fetchGarminSyncStatus() {
   return data
 }
 
-// Trigger manual Garmin sync
+// Trigger manual Garmin sync via Next.js API route
 export async function triggerGarminSync(): Promise<{ success: boolean; synced?: number; error?: string }> {
   try {
-    const resp = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/garmin-sync`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      }
-    )
+    const resp = await fetch('/api/garmin/sync', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ days: 30 }),
+    })
+
     const result = await resp.json()
-    return { success: result.success, synced: result.synced, error: result.error }
+
+    if (result.success) {
+      return {
+        success: true,
+        synced: result.new_activities || 0,
+        error: undefined,
+      }
+    }
+
+    return { success: false, error: result.error || 'Sync mislukt' }
   } catch (err) {
-    return { success: false, error: String(err) }
+    return {
+      success: false,
+      error: 'Kon Garmin niet bereiken. Controleer of Python + garminconnect geïnstalleerd is.',
+    }
+  }
+}
+
+// Login to Garmin Connect
+export async function loginGarmin(email: string, password?: string): Promise<{ success: boolean; display_name?: string; error?: string }> {
+  try {
+    const resp = await fetch('/api/garmin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    })
+
+    return await resp.json()
+  } catch (err) {
+    return {
+      success: false,
+      error: 'Kon Garmin login niet bereiken.',
+    }
+  }
+}
+
+// Get Garmin connection status
+export async function getGarminStatus(): Promise<{
+  connected: boolean
+  display_name?: string
+  garmin_email?: string
+  last_sync_at?: string
+  synced_activities?: number
+  error?: string
+}> {
+  try {
+    const resp = await fetch('/api/garmin/status')
+    return await resp.json()
+  } catch {
+    return { connected: false, error: 'Status niet beschikbaar' }
   }
 }

@@ -2,7 +2,7 @@
 
 import { Waves, Bike, Footprints, Zzz, Clock, MapPin, Zap } from 'lucide-react'
 import { PlannedWorkout, SPORT_COLORS } from '@/lib/types/workout'
-import { SportBadge } from './sport-badge'
+import { SportBadge, BrickSessionBadge } from './sport-badge'
 
 interface WorkoutCardDailyProps {
   workout: PlannedWorkout
@@ -66,13 +66,18 @@ export function WorkoutCardDaily({
   isPrimary = true,
   onClick,
 }: WorkoutCardDailyProps) {
-  const colors = SPORT_COLORS[workout.sport]
-  const Icon = SPORT_ICONS[workout.sport]
+  const isBrick = workout.sport === 'brick'
+  const colors = SPORT_COLORS[workout.sport] || SPORT_COLORS.bike
+  const Icon = SPORT_ICONS[workout.sport] || SPORT_ICONS.bike
   const intensityColor = INTENSITY_COLORS[workout.intensity] || 'bg-gray-500/20 text-gray-400'
   const intensityLabel = INTENSITY_LABELS[workout.intensity] || workout.intensity
 
   const distance = formatDistance(workout.distanceMeters)
   const duration = formatDuration(workout.durationSeconds)
+
+  // Support both new (primaryTarget/secondaryTargets) and old (targets) structures
+  const primaryTarget = workout.primaryTarget || workout.targets?.primary
+  const secondaryTargets = workout.secondaryTargets || workout.targets?.secondary
 
   return (
     <button
@@ -88,7 +93,11 @@ export function WorkoutCardDaily({
         {/* Header: Sport badge + Title + Intensity */}
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-start gap-3 flex-1 min-w-0">
-            <SportBadge sport={workout.sport} size="md" />
+            {isBrick ? (
+              <BrickSessionBadge size="md" />
+            ) : (
+              <SportBadge sport={workout.sport} size="md" />
+            )}
             <div className="flex-1 min-w-0">
               <h3 className="font-bold text-white text-lg truncate">{workout.title}</h3>
               <p className="text-xs text-gray-500 truncate">{workout.description}</p>
@@ -104,7 +113,7 @@ export function WorkoutCardDaily({
         </div>
 
         {/* Primary Target */}
-        {workout.targets.primary && (
+        {primaryTarget && (
           <div className="bg-[#1a1a2e] rounded-lg p-3 space-y-2">
             <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">
               Doel
@@ -113,10 +122,10 @@ export function WorkoutCardDaily({
               <Zap size={16} className={colors.tailwind} />
               <div className="min-w-0">
                 <p className="text-white font-bold">
-                  {workout.targets.primary.value || `${workout.targets.primary.min}-${workout.targets.primary.max}`}
+                  {primaryTarget.value || `${primaryTarget.min}-${primaryTarget.max}`}
                 </p>
                 <p className="text-xs text-gray-400">
-                  {workout.targets.primary.zone || workout.targets.primary.label}
+                  {primaryTarget.zone || primaryTarget.label}
                 </p>
               </div>
             </div>
@@ -147,17 +156,16 @@ export function WorkoutCardDaily({
         </div>
 
         {/* Secondary Targets */}
-        {workout.targets.secondary && workout.targets.secondary.length > 0 && (
+        {secondaryTargets && secondaryTargets.length > 0 && (
           <div className="space-y-2">
             <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">
               Secundaire doelen
             </p>
             <div className="space-y-1">
-              {workout.targets.secondary.map((target, idx) => (
+              {secondaryTargets.map((target, idx) => (
                 <div key={idx} className="text-xs text-gray-400 bg-[#1a1a2e] rounded px-2 py-1">
-                  {target.label || target.zone} {
-                    target.min && target.max ? `${target.min}-${target.max}` : target.value
-                  }
+                  {target.label || target.zone}{' '}
+                  {target.min && target.max ? `${target.min}-${target.max}` : target.value}
                 </div>
               ))}
             </div>

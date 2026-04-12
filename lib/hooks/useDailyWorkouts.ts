@@ -50,10 +50,10 @@ export function useDailyWorkouts(token: string): UseDailyWorkoutsReturn {
       setIsLoading(true)
       setError(null)
 
-      const data = await getTodayWorkouts(token)
+      const data = await getTodayWorkouts(token, timezone)
       setWorkouts(data.workouts)
       setDate(data.date)
-      setDayOfWeek(data.day_of_week)
+      setDayOfWeek(data.dayOfWeek)
       setTimezone(data.timezone)
       setLastSyncTime(new Date().toLocaleTimeString('nl-NL', {
         hour: '2-digit',
@@ -66,15 +66,15 @@ export function useDailyWorkouts(token: string): UseDailyWorkoutsReturn {
     } finally {
       setIsLoading(false)
     }
-  }, [token])
+  }, [token, timezone])
 
   const refresh = useCallback(async () => {
     try {
       setError(null)
-      const data = await refreshTodayWorkouts(token)
+      const data = await refreshTodayWorkouts(token, timezone)
       setWorkouts(data.workouts)
       setDate(data.date)
-      setDayOfWeek(data.day_of_week)
+      setDayOfWeek(data.dayOfWeek)
       setTimezone(data.timezone)
       setLastSyncTime(new Date().toLocaleTimeString('nl-NL', {
         hour: '2-digit',
@@ -86,7 +86,7 @@ export function useDailyWorkouts(token: string): UseDailyWorkoutsReturn {
       console.error('Error refreshing workouts:', err)
       throw err
     }
-  }, [token])
+  }, [token, timezone])
 
   const completeWorkout = useCallback(
     async (workoutId: string, rpe: number, notes?: string, feeling?: string) => {
